@@ -9,72 +9,100 @@ const mailgun = require("mailgun-js");
 const DOMAIN = 'sandbox861aaa4a49844cc7b6512bcd31d76942.mailgun.org';
 const mg = mailgun({apiKey: '08484bf0413dadc2a1e27a3b31e8062b-2ac825a1-6aad7fe0', domain: DOMAIN});
 
-
 router.post("/register",(req,res) =>{
-    var {username,email,password}=req.body;
-    const {errors,isValid} = validateRegisterInput(req.body);
+    const newUser = new User({
+        username : req.body.username,
+        email : req.body.email,
+        password : req.body.password
+    });
+    newUser.save()
+    return res.send({
+        status:"success",
+        massage:"Register akun berhasil",
+        data:newUser
+    })
+    // bcrypt.genSalt(10,(err,salt) => {
+    //     bcrypt.hash(newUser.password,salt,(err,hash) => {
+    //         if(err) throw err;
+    //         newUser.password = hash;
+    //         newUser.save()
+    //             .then(user => res.json(user))
+    //             .catch(err => console.log(err))
+    //         // return res.json(newUser);
+    //         return res.send({
+    //             status:"success",
+    //             massage:"Register akun berhasil",
+    //             data:newUser
+    //         })
+    //     })
+    // });
+}),
 
-    if(!isValid){
-        return res.status(400).json(errors);
-    }
-    User.findOne({email})
-        .then(user => {
-            if(user){
-                return res.status(400).json({'email' : 'Alamat email sudah digunakan'});
-            }else{
-                // bcrypt.genSalt(10,(err,salt) => {
-                //         bcrypt.hash(password,salt,(err,hash) => {
-                //             if(err) throw err;
-                //             password = hash;
-                //         })
-                //     });
-                //     console.log(password)
-                //email verif
-                const token = jwt.sign({username,email,password},'accountactivatekey123',{expiresIn:'20m'})
-                const data = {
-                    from: 'Bagikan@samples.mailgun.org',
-                    to: email,
-                    subject: 'Email Verification',
-                    html:`
-                        <h2>Please click on given link to activate your account</h2>
-                        <p>http://localhost:5000/authentication/activate/${token}</p>
-                    `
-                    // text: 'Verif email here'
-                };
-                mg.messages().send(data, function (error, body) {
-                    if(error){
-                        return res.json({
-                            massage:err.massage
-                        })
-                    }
-                    return res.json({massage:'Email has been sent,kindly activate your account'})
-                    console.log(body);
-                });
+// router.post("/register",(req,res) =>{
+//     var {username,email,password}=req.body;
+//     const {errors,isValid} = validateRegisterInput(req.body);
+
+//     if(!isValid){
+//         return res.status(400).json(errors);
+//     }
+//     User.findOne({email})
+//         .then(user => {
+//             if(user){
+//                 return res.status(400).json({'email' : 'Alamat email sudah digunakan'});
+//             }else{
+//                 // bcrypt.genSalt(10,(err,salt) => {
+//                 //         bcrypt.hash(password,salt,(err,hash) => {
+//                 //             if(err) throw err;
+//                 //             password = hash;
+//                 //         })
+//                 //     });
+//                 //     console.log(password)
+//                 //email verif
+//                 const token = jwt.sign({username,email,password},'accountactivatekey123',{expiresIn:'20m'})
+//                 const data = {
+//                     from: 'Bagikan@samples.mailgun.org',
+//                     to: email,
+//                     subject: 'Email Verification',
+//                     html:`
+//                         <h2>Please click on given link to activate your account</h2>
+//                         <p>http://localhost:5000/authentication/activate/${token}</p>
+//                     `
+//                     // text: 'Verif email here'
+//                 };
+//                 mg.messages().send(data, function (error, body) {
+//                     if(error){
+//                         return res.json({
+//                             massage:err.massage
+//                         })
+//                     }
+//                     return res.json({massage:'Email has been sent,kindly activate your account'})
+//                     console.log(body);
+//                 });
 
 
-                // const newUser = new User({
-                //     username : req.body.username,
-                //     email : req.body.email,
-                //     password : req.body.password
-                // });
-                // bcrypt.genSalt(10,(err,salt) => {
-                //     bcrypt.hash(newUser.password,salt,(err,hash) => {
-                //         if(err) throw err;
-                //         newUser.password = hash;
-                //         newUser.save()
-                //             .then(user => res.json(user))
-                //             .catch(err => console.log(err))
-                //         // return res.json(newUser);
-                //         return res.send({
-                //             status:"success",
-                //             massage:"Register akun berhasil",
-                //             data:newUser
-                //         })
-                //     })
-                // });
-            }
-        })
-});
+//                 // const newUser = new User({
+//                 //     username : req.body.username,
+//                 //     email : req.body.email,
+//                 //     password : req.body.password
+//                 // });
+//                 // bcrypt.genSalt(10,(err,salt) => {
+//                 //     bcrypt.hash(newUser.password,salt,(err,hash) => {
+//                 //         if(err) throw err;
+//                 //         newUser.password = hash;
+//                 //         newUser.save()
+//                 //             .then(user => res.json(user))
+//                 //             .catch(err => console.log(err))
+//                 //         // return res.json(newUser);
+//                 //         return res.send({
+//                 //             status:"success",
+//                 //             massage:"Register akun berhasil",
+//                 //             data:newUser
+//                 //         })
+//                 //     })
+//                 // });
+//             }
+//         })
+// });
 router.post("/email-activate",(req,res) =>{
     const {token} = req.body;
     if(token){
