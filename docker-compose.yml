@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+  mongo:
+    container_name: mongo
+    image: mongo:5.0
+    ports:
+      - 27017:27017
+    networks:
+      - net_consulstaion_backend
+  node:
+    container_name: node
+    image: node:14.17.6
+    ports:
+      - 8080:8080
+    networks:
+      - net_consulstaion_backend
+  consulstation-backend:
+    container_name: consulstation-backend
+    image: consulstation-backend:1.0
+    ports: 8090:8090
+    depends_on:
+      - node
+      - mongo
+    networks:
+      - net_consulstaion_backend
+
+networks:
+  net_consulstaion_backend:
+    name: net_consulstaion_backend
