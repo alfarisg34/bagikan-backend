@@ -1,4 +1,5 @@
 const { authServices } = require('../services')
+const { User } = require('../models')
 
 exports.login = async (req, res) => {
   const { username, password } = req.body
@@ -52,4 +53,15 @@ exports.refreshToken = async (req, res) => {
     console.log('Errors: ', err)
     res.sendStatus(err)
   }
+}
+
+exports.deleteUser = async (req, res) => {
+  const userId = req.body.id
+  const user = await User.findOneAndDelete({ _id: userId })
+
+  res.status(200).json({
+    success: true,
+    message: 'Successfuly delete user!',
+    data: user,
+  })
 }
