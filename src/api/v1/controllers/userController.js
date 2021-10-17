@@ -1,5 +1,8 @@
 const { User } = require('../models')
 
+//hide attribute
+const queryConfig = { password: 0 ,created_at : 0, _id : 0}
+
 exports.getUser = async (req, res) => {
   const user = await User.find()
 
@@ -8,7 +11,7 @@ exports.getUser = async (req, res) => {
 
 exports.getProfile = async (req, res) => {
   const userId = req.user.id
-  const user = await User.findOne({ _id: userId })
+  const user = await User.findOne({ _id: userId },queryConfig)
 
   res.status(200).json({
     success: true,
