@@ -7,14 +7,14 @@ services:
     ports:
       - 27017:27017
     networks:
-      - net_consulstaion_backend
+      - net_bagikan_backend
   node:
     container_name: node
     image: node:14.17.6
     ports:
       - 8080:8080
     networks:
-      - net_consulstaion_backend
+      - net_bagikan_backend
   consulstation-backend:
     container_name: consulstation-backend
     image: consulstation-backend:1.0
@@ -23,8 +23,8 @@ services:
       - node
       - mongo
     networks:
-      - net_consulstaion_backend
+      - net_bagikan_backend
 
 networks:
-  net_consulstaion_backend:
-    name: net_consulstaion_backend
+  net_bagikan_backend:
+    name: net_bagikan_backend
