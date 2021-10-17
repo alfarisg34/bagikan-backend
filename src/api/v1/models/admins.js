@@ -26,6 +26,10 @@ const adminSchema = new mongoose.Schema({
   profilePicture : String,
   verifiedAt : Date
 })
-
+adminSchema.pre('save', async function (next) {
+  const hashedPassword = await bcrypt.hash(this.password, 12)
+  this.password = hashedPassword
+  next()
+})
 
 module.exports = mongoose.model('Admin', adminSchema)

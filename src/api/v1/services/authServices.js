@@ -1,4 +1,4 @@
-const { User, RefreshToken} = require('../models')
+const { User, RefreshToken,Admin} = require('../models')
 const { isEmail } = require('validator')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -59,6 +59,17 @@ exports.login = async (email, password) => {
     const result = await bcrypt.compare(password, user.password)
 
     if (result) return user
+  }
+  throw 'Your credentials are incorrect!'
+}
+
+exports.loginAdmin = async (username, password) => {
+  const searchParams = (username) ? { username: username } : { username }
+  const admin = await Admin.findOne(searchParams)
+  if (admin) {
+    const result = await bcrypt.compare(password, admin.password)
+
+    if (result) return admin
   }
   throw 'Your credentials are incorrect!'
 }
