@@ -1,14 +1,15 @@
 const { authServices } = require('../services')
-const { User ,Post} = require('../models')
+const { User ,Post,Admin} = require('../models')
 
 exports.login = async (req, res) => {
   const { username, password } = req.body
-
+  //hide attribute
+  const queryConfig = { password: 0 ,created_at : 0, _id : 0,__v:0}
   try {
     const admin = await authServices.loginAdmin(username, password)
     const [token, refreshToken] = authServices.createTokens(admin._id)
     await authServices.saveRefreshToken(refreshToken)
-
+    const data = await Admin.findOne(admin._id,queryConfig)
     res.cookie('token', token, {
       httpOnly: true,
       maxAge: process.env.ACCESS_TOKEN_LIFE,
@@ -21,6 +22,7 @@ exports.login = async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Logged in successfully!',
+      data:data,
       token,
       refreshToken,
     })
