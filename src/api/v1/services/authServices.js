@@ -52,8 +52,8 @@ exports.register = async (username, email, password) => {
   return user.save()
 }
 
-exports.login = async (email, password) => {
-  const searchParams = isEmail(email) ? { email: email } : { email }
+exports.login = async (password,username) => {
+  const searchParams = isEmail(username) ? { email: username } : { username }
   const user = await User.findOne(searchParams)
   if (user) {
     const result = await bcrypt.compare(password, user.password)
@@ -85,6 +85,20 @@ exports.handleRegistrationErrors = (err) => {
     return errorObj
   }
 
+  // handling validation errors
+  if (err._message === 'User validation failed') {
+    Object.keys(err.errors).forEach((key) => {
+      errorObj[key] = err.errors[key].message
+    })
+
+    return errorObj
+  }
+
+  return err
+}
+
+exports.handleLoginErrors = (err) => {
+  let errorObj = {}
   // handling validation errors
   if (err._message === 'User validation failed') {
     Object.keys(err.errors).forEach((key) => {
