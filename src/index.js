@@ -4,6 +4,9 @@ const dotenv = require('dotenv')
 const config = require('./config')
 const routes = require('./api/v1/routes')
 const cors = require('cors')
+const bodyParser = require('body-parser')
+var multipart = require('connect-multiparty')
+const multer = require("multer")
 
 const app = express()
 
@@ -29,9 +32,11 @@ app.use(cors(corsOptions))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cookieParser())
+app.use( bodyParser.json())
+app.use(multipart());
 
 // Importing routes
 app.get('/api', (req, res) => {
-  res.send('You are connected to Consulstation APIs!')
+  res.send('You are connected to APIs!')
 })
 routes.forEach((route) => app.use('/api', route))
