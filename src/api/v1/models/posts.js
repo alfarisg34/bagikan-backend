@@ -12,12 +12,13 @@ const postSchema = new mongoose.Schema({
     maxlength: [255, 'Title can not be more than 255 characters'],
   },
   like: {
-    type: String,
+    type: Number,
+    default:0
   },
   picture: String,
   location : String,
   category: String,
-  expired : String,
+  expired : Date,
   created_at:{
     type:Date,
     default:Date.now

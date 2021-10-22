@@ -23,10 +23,17 @@ const userSchema = new mongoose.Schema({
     maxlength: [24, 'Password can not be more than 24 characters'],
     required: [true, 'Password can not be blank'],
   },
-  nama : String,
-  profilePicture: String,
-  deskripsi : String,
-  phone: String,
+  name : String,
+  profilePicture: {
+    type: String,
+    default: 'default.jpg',
+  },
+  description : String,
+  phone: {
+    type: String,
+    minlength: [10, 'Password can not be less than 10 characters'],
+    maxlength: [16, 'Password can not be more than 16 characters'],
+  },
   verifiedAt: Date,
   created_at:{
     type:Date,
