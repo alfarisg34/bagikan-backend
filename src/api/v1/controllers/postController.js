@@ -8,10 +8,10 @@ exports.getPost = async (req, res) => {
 }
 
 exports.createPost = async (req, res) => {
-  const { title,description } = req.body
+  const { title,description,location,category,expired,picturePost } = req.body
 
   try {
-    await postServices.create(title,description)
+    await postServices.create(title,description,location,category,expired,picturePost)
 
     return res.status(201).json({
       success: true,
