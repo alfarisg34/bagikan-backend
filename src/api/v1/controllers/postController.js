@@ -1,5 +1,5 @@
 const { postServices } = require('../services')
-const { Post} = require('../models')
+const { Post,User} = require('../models')
 
 exports.getPost = async (req, res) => {
   const post = await Post.find()
@@ -11,7 +11,10 @@ exports.createPost = async (req, res) => {
   const { title,description,location,category,expired,picturePost } = req.body
 
   try {
-    await postServices.create(title,description,location,category,expired,picturePost)
+    const userId = req.user.id
+    const user = await User.findOne({ _id: userId })
+    const username = user.username
+    await postServices.create(title,description,location,category,expired,picturePost,username)
 
     return res.status(201).json({
       success: true,
