@@ -9,7 +9,7 @@ const postSchema = new mongoose.Schema({
   description : {
     type: String,
     required: [true, 'Description can not be blank'],
-    maxlength: [255, 'Title can not be more than 255 characters'],
+    maxlength: [255, 'Description can not be more than 255 characters'],
   },
   like: {
     type: Number,

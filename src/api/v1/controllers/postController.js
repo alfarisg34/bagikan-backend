@@ -43,3 +43,18 @@ exports.updatePost = async (req, res) => {
   })
 }
 
+exports.likePost = async (req, res) => {
+  const postId = req.params.id
+  const userLike = req.user.id
+  const post = await Post.findOne({ _id: postId })
+  console.log(post)
+  post.like = post.like + 1
+  post.save()
+
+  res.status(201).json({
+    success: true,
+    message: 'Successfully like post!',
+    data: post,
+  })
+}
+
