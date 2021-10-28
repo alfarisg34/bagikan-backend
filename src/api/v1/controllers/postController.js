@@ -1,6 +1,9 @@
 const { postServices } = require('../services')
 const { Post,User} = require('../models')
 
+const multer = require('multer')
+const fs = require('fs');
+
 exports.getPost = async (req, res) => {
   const post = await Post.find()
 
@@ -8,13 +11,17 @@ exports.getPost = async (req, res) => {
 }
 
 exports.createPost = async (req, res) => {
-  const { title,description,location,category,expired,picturePost } = req.body
+  const { title,description,location,category,expired } = req.body
 
   try {
     const userId = req.user.id
-    const user = await User.findOne({ _id: userId })
-    const username = user.username
-    await postServices.create(title,description,location,category,expired,picturePost,username)
+    // const user = await User.findOne({ _id: userId })
+    // const username = user.username
+
+    // const expiredDate = Date.now + expired
+    let picture = req.file['filename']
+    
+    await postServices.create(title,description,location,category,expired,picture,userId)
 
     return res.status(201).json({
       success: true,

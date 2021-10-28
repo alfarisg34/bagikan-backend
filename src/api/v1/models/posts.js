@@ -16,6 +16,7 @@ const postSchema = new mongoose.Schema({
     default:0
   },
   username: String,
+  userId: String,
   picture: String,
   location : String,
   category: String,
