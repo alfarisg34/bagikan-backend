@@ -54,15 +54,16 @@ exports.updateProfile = async (req, res) => {
     phone,
   } = req.body;
 
-  console.log(req.files)
+  // console.log(req.file['filename'])
   let profilePicture;
   if(req.file){
     if(user.profilePicture !== 'profilePicture.jpg'){
-        fs.unlinkSync(`./uploads/profilePicture/${user.profilePicture}`);
+        fs.unlinkSync(`./src/api/v1/uploads/profilepicture/${user.profilePicture}`);
     }
-    profilePicture = req.files['profilePicture']['name']
+    profilePicture = req.file['filename']
   }
   // console.log(user)
+  try{
   const result = await user.updateOne({ 
     name: name,
     description: description,
@@ -74,4 +75,12 @@ exports.updateProfile = async (req, res) => {
     message: 'Successfully updated user!',
     data: result,
   })
+}
+  catch(error){
+    return res.status(400).json({
+      success: false,
+      message: error.message
+  });
+  }
+  
 }
