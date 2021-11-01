@@ -31,10 +31,14 @@ const upload = multer({
     storage: storage,
     fileFilter: fileFilter
 });
-
+// console.log(upload)
 const router = Router()
 
 router.get('/posts', verifyToken, postController.getPost)
+router.get('/posts/read_id/:id', postController.read_id)
+router.get('/posts/read',postController.read)
+router.get('/post/detail/:id',postController.detail_read_id)
+
 router.post('/post/create',upload.single('picture'), verifyToken, postController.createPost)
 router.post('/post/update', upload.single('picture'),verifyToken, postController.updatePost)
 router.post('/post/like/:id', verifyToken, postController.likePost)

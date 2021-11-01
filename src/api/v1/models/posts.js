@@ -18,6 +18,7 @@ const postSchema = new mongoose.Schema({
   username: String,
   userId: String,
   picture: String,
+  profilePicture :String,
   location : String,
   category: String,
   expired : Date,
