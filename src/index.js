@@ -5,7 +5,8 @@ const dotenv = require('dotenv')
 const config = require('./config')
 const routes = require('./api/v1/routes')
 const multer = require("multer")
-const cors = require("cors");
+const cors = require("cors")
+const path = require('path')
 
 const app = express()
 
@@ -31,7 +32,11 @@ app.use(cors(corsOptions))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cookieParser())
-/
+app.use('/uploads/post', express.static(path.join(__dirname, 'api/v1/uploads/post')));
+app.use('/uploads/profilepicture', express.static(path.join(__dirname, 'api/v1/uploads/profilepicture')));
+// console.log(__dirname)
+// app.use(express.static('uploads'))
+
 // Importing routes
 app.get('/api', (req, res) => {
   res.send('You are connected to APIs!')
