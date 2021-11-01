@@ -1,6 +1,6 @@
 const { User } = require('../models')
 const multer = require('multer')
-const upload = multer({dest: '../uploads/profilePicture'})
+// const upload = multer({dest: '../uploads/profilePicture'})
 const fs = require('fs');
 
 //hide attribute
@@ -54,12 +54,12 @@ exports.updateProfile = async (req, res) => {
     phone,
   } = req.body;
 
-  // console.log(req.file['filename'])
+  console.log(req.file['filename'])
   let profilePicture;
   if(req.file){
-    if(user.profilePicture !== 'profilePicture.jpg'){
-        fs.unlinkSync(`./src/api/v1/uploads/profilepicture/${user.profilePicture}`);
-    }
+    // if(user.profilePicture !== 'profilePicture.jpg'){
+    //     fs.unlinkSync(`./src/api/v1/uploads/profilepicture/${user.profilePicture}`);
+    // }
     profilePicture = req.file['filename']
   }
   // console.log(user)
