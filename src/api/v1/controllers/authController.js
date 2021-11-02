@@ -36,7 +36,7 @@ exports.login = async (req, res) => {
     const user = await authServices.login( password,username)
     const [token, refreshToken] = authServices.createTokens(user._id)
     await authServices.saveRefreshToken(refreshToken)
-    const data = await User.findOne(user._id,queryConfig)
+    const data = await User.findOne({_id:user._id},queryConfig)
 
     res.cookie('token', token, {
       httpOnly: true,

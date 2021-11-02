@@ -41,6 +41,5 @@ router.get('/post/detail/:id',postController.detail_read_id)
 
 router.post('/post/create',upload.single('picture'), verifyToken, postController.createPost)
 router.post('/post/update', upload.single('picture'),verifyToken, postController.updatePost)
-router.post('/post/like/:id', verifyToken, postController.likePost)
 
 module.exports = router
