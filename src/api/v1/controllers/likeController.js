@@ -1,25 +1,41 @@
-const { postServices } = require('../services')
-const { Post,User} = require('../models')
+const { likeServices } = require('../services')
+const { Like,Post,User} = require('../models')
 
-exports.getPost = async (req, res) => {
-  const post = await Post.find()
-
-  res.json(post)
-}
-
-exports.createPost = async (req, res) => {
-  const { title,description,location,category,expired,picturePost } = req.body
+exports.like = async (req, res) => {
+  const postId = req.params.id
+  const userId = req.user.id
 
   try {
-    const userId = req.user.id
-    const user = await User.findOne({ _id: userId })
-    const username = user.username
-    await postServices.create(title,description,location,category,expired,picturePost,username)
+    // const like = await Like.find({userId:userId})
+    const like = await Like.findOne({$and:[{userId:userId},{postId:postId}]})
+    console.log(like)
+    // console.log(`userId: `+userId)
+    // console.log(`postId: `+postId)
+    if(like == null){
+      const result = await likeServices.create(userId,postId)
+  
+      res.status(201).json({
+        success: true,
+        message: 'Successfully like post!',
+        data: result,
+      })
+    }
+    if(like.status == 1){
+      res.status(201).json({
+        success: false,
+        message: 'Post Sudah dilike',
+      })
+    }
+    else if(like.status == 0 ||like.status == false){
+      
+      like.status=true
+      like.save()
+      res.status(201).json({
+        success: true,
+        message: 'Successfully like post!',
+      })
+    }
 
-    return res.status(201).json({
-      success: true,
-      message: 'Post stored successfully!',
-    })
   } catch (err) {
     console.log('Errors: ', err)
     const errorMessage = postServices.handleRegistrationErrors(err)
@@ -30,31 +46,42 @@ exports.createPost = async (req, res) => {
       errors: errorMessage,
     })
   }
+
 }
 
-exports.updatePost = async (req, res) => {
-  const postId = req.body.id
-  const data = req.body
-  const result = await Post.updateOne({ _id: postId }, data)
-  res.status(201).json({
-    success: true,
-    message: 'Successfully updated post!',
-    data: result,
-  })
-}
-
-exports.likePost = async (req, res) => {
+exports.dislike = async (req, res) => {
   const postId = req.params.id
-  const userLike = req.user.id
-  const post = await Post.findOne({ _id: postId })
-  console.log(post)
-  post.like = post.like + 1
-  post.save()
+  const userId = req.user.id
 
-  res.status(201).json({
-    success: true,
-    message: 'Successfully like post!',
-    data: post,
-  })
+  try {
+    // const like = await Like.find({'like.userId':userId})
+    const like = await Like.findOne({$and:[{'like.userId':userId},{'like.postId':postId}]})
+    // console.log(like.status)
+    if(like.status == true){
+      like.status=false
+      like.save()
+
+      res.status(201).json({
+        success: true,
+        message: 'Dislike post berhasil',
+      })
+    }
+    else if(like.status == false){
+  
+      res.status(201).json({
+        success: true,
+        message: 'Post sudah di dislike',
+      })
+    }
+  } catch (err) {
+    console.log('Errors: ', err)
+    const errorMessage = postServices.handleRegistrationErrors(err)
+
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to like!',
+      errors: errorMessage,
+    })
+  }
 }
 
