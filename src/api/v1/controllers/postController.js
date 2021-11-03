@@ -67,8 +67,8 @@ exports.updatePost = async (req, res) => {
   // console.log(req.body)
   let picture;
   if(req.file){
-    if (findUser.profile_picture !== 'profile_pict.jpg') {
-      fs.unlinkSync(`./src/api/v1/uploads/post/${findUser.profile_picture}`);
+    if (post.picture !== 'pict.jpg') {
+      fs.unlinkSync(`./src/api/v1/uploads/post/${post.picture}`);
   }
     picture = req.file['filename']
   }

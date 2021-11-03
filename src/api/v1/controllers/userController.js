@@ -57,9 +57,9 @@ exports.updateProfile = async (req, res) => {
   // console.log(req.file['filename'])
   let profilePicture;
   if(req.file){
-    // if(user.profilePicture !== 'profilePicture.jpg'){
-    //     fs.unlinkSync(`./src/api/v1/uploads/profilepicture/${user.profilePicture}`);
-    // }
+    if(user.profilePicture !== 'profilePicture.jpg'){
+        fs.unlinkSync(`./src/api/v1/uploads/profilepicture/${user.profilePicture}`);
+    }
     profilePicture = req.file['filename']
   }
   // console.log(user)
