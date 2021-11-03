@@ -54,7 +54,7 @@ exports.updateProfile = async (req, res) => {
     phone,
   } = req.body;
 
-  console.log(req.file['filename'])
+  // console.log(req.file['filename'])
   let profilePicture;
   if(req.file){
     // if(user.profilePicture !== 'profilePicture.jpg'){

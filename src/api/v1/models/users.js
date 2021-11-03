@@ -31,8 +31,8 @@ const userSchema = new mongoose.Schema({
   description : String,
   phone: {
     type: String,
-    minlength: [10, 'Password can not be less than 10 characters'],
-    maxlength: [16, 'Password can not be more than 16 characters'],
+    minlength: [10, 'Phone can not be less than 10 characters'],
+    maxlength: [16, 'Phone can not be more than 16 characters'],
   },
   verifiedAt: Date,
   created_at:{
