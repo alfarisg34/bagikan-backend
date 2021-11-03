@@ -22,6 +22,9 @@ const postSchema = new mongoose.Schema({
   location : String,
   category: String,
   expired : Date,
+  phone: {
+    type: String,
+  },
   created_at:{
     type:Date,
     default:Date.now

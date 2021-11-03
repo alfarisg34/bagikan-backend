@@ -40,6 +40,6 @@ router.get('/posts/read',postController.read)
 router.get('/post/detail/:id',postController.detail_read_id)
 
 router.post('/post/create',upload.single('picture'), verifyToken, postController.createPost)
-router.post('/post/update', upload.single('picture'),verifyToken, postController.updatePost)
+router.post('/post/update/:id', upload.single('picture'),verifyToken, postController.updatePost)
 
 module.exports = router

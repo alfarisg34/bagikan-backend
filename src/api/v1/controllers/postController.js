@@ -35,12 +35,13 @@ exports.createPost = async (req, res) => {
     const user = await User.findOne({ _id: userId })
     const username = user.username
     const profilePicture = user.profilePicture
+    const phone = user.phone
     // console.log(user.profilePicture)
     // const expiredDate = Date.now + expired
     // delete req.headers['content-type'];
     let picture = req.file['filename']
     
-    await postServices.create(title,description,location,category,expired,picture,userId,username,profilePicture)
+    await postServices.create(title,description,location,category,expired,picture,userId,username,profilePicture,phone)
 
     return res.status(201).json({
       success: true,
@@ -59,14 +60,39 @@ exports.createPost = async (req, res) => {
 }
 
 exports.updatePost = async (req, res) => {
-  const postId = req.body.id
-  const data = req.body
-  const result = await Post.updateOne({ _id: postId }, data)
-  res.status(201).json({
-    success: true,
-    message: 'Successfully updated post!',
-    data: result,
-  })
+  const postId = req.params.id
+  const { title,description,location,category,expired } = req.body
+  const post = await Post.findById(postId)
+  // console.log(post)
+  // console.log(req.body)
+  let picture;
+  if(req.file){
+    if (findUser.profile_picture !== 'profile_pict.jpg') {
+      fs.unlinkSync(`./src/api/v1/uploads/post/${findUser.profile_picture}`);
+  }
+    picture = req.file['filename']
+  }
+  try {
+    const result = await post.updateOne({
+      title: title,
+      description: description,
+      location: location,
+      category: category,
+      expired: expired,
+      picture: picture,
+  });
+    res.status(201).json({
+      success: true,
+      message: 'Successfully updated post!',
+      data: result,
+    })
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error.message
+  });
+  }
+  
 }
 
 exports.likePost = async (req, res) => {
@@ -102,7 +128,7 @@ exports.read_id = async (req, res) => {
 
 exports.detail_read_id = async (req, res) => {
 //hide attribute
-const queryConfig = { password: 0 ,created_at : 0, _id : 0}
+const queryConfig = { password: 0 , _id : 0}
 
   const postId = req.params.id
   const post = await Post.findOne({ _id :postId},queryConfig)

@@ -42,7 +42,7 @@ exports.saveRefreshToken = async (token) => {
   return refreshToken.save()
 }
 
-exports.create = async (title,description,location,category,expired,picture,userId,username,profilePicture) => {
+exports.create = async (title,description,location,category,expired,picture,userId,username,profilePicture,phone) => {
   const post = new Post({
     title,
     description,
@@ -52,7 +52,8 @@ exports.create = async (title,description,location,category,expired,picture,user
     picture,
     userId,
     username,
-    profilePicture
+    profilePicture,
+    phone
   })
 
   return post.save()
