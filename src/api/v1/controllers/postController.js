@@ -9,6 +9,17 @@ exports.getPost = async (req, res) => {
 
   res.json(post)
 }
+exports.readPostPrivate = async (req, res) => {
+  const id = req.user.id
+  const queryConfig = { title: 0 ,created_at : 0, description : 0,location:0,category:0,expired:0,created_at:0,like:0,username:0,phone:0,profilePicture:0}
+  const post = await Post.find({ userId: id },queryConfig)
+
+  res.status(200).json({
+    success: true,
+    message: 'Successfuly retreived post information!',
+    data: post,
+  })
+}
 
 exports.read = async (req, res) => {
   //hide attribute
@@ -114,10 +125,8 @@ exports.read_id = async (req, res) => {
   
   const userId = req.params.id
   //hide attribute
- const queryConfig = { title: 0 ,created_at : 0, description : 0,userId:0,location:0,category:0,expired:0,created_at:0,like:0}
-  const post = await Post.find({ where: function(){
-    return (this.userId == userId)
-  }},queryConfig)
+ const queryConfig = { title: 0 ,created_at : 0, description : 0,location:0,category:0,expired:0,created_at:0,like:0,username:0,phone:0,profilePicture:0}
+  const post = await Post.find({ userId: userId },queryConfig)
 
   res.status(200).json({
     success: true,

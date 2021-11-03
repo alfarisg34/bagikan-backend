@@ -36,6 +36,7 @@ const router = Router()
 
 router.get('/posts', verifyToken, postController.getPost)
 router.get('/posts/read_id/:id', postController.read_id)
+router.get('/posts/read/profile',verifyToken, postController.readPostPrivate)
 router.get('/posts/read',postController.read)
 router.get('/post/detail/:id',postController.detail_read_id)
 
