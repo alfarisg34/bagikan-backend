@@ -21,7 +21,8 @@ const postSchema = new mongoose.Schema({
   profilePicture :String,
   location : String,
   category: String,
-  expired : Date,
+  expired : String,
+  expiredDate : Date,
   phone: {
     type: String,
   },
