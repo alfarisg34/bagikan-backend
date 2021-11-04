@@ -1,4 +1,4 @@
-const { User } = require('../models')
+const { User,Post,Feedback } = require('../models')
 const multer = require('multer')
 // const upload = multer({dest: '../uploads/profilePicture'})
 const fs = require('fs');
@@ -62,6 +62,9 @@ exports.updateProfile = async (req, res) => {
     }
     profilePicture = req.file['filename']
   }
+  const post = await Post.updateMany({ userId: userId }, {$set: {profilePicture: profilePicture}})
+  await Post.updateMany({ userId: userId }, {$set: {phone: phone}})
+  const feedback = await Feedback.updateMany({ userId: userId }, {$set: {profilePictureSender: profilePicture}})
   // console.log(user)
   try{
   const result = await user.updateOne({ 
