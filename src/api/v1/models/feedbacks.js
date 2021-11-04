@@ -8,6 +8,8 @@ const feedbackSchema = new mongoose.Schema({
   },
   idSender: String,
   idReceiver: String,
+  usernameSender:String,
+  profilePictureSender:String,
   created_at:{
     type:Date,
     default:Date.now

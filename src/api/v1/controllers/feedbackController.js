@@ -2,7 +2,8 @@ const { feedbackServices } = require('../services')
 const { Feedback,User} = require('../models')
 
 exports.getFeedbackByUser = async (req, res) => {
-  const feedback = await Feedback.find()
+  const userId = req.params.id
+  const feedback = await Feedback.find({idReceiver:userId})
 
   res.json(feedback)
 }
@@ -13,7 +14,10 @@ exports.createFeedback = async (req, res) => {
   try {
     const idReceiver = req.params.id
     const idSender = req.user.id
-    const data = await feedbackServices.create(description,idSender,idReceiver)
+    const user = await User.findOne({ _id: idSender })
+    const usernameSender = user.username
+    const profilePictureSender = user.profilePicture
+    const data = await feedbackServices.create(description,idSender,idReceiver,usernameSender,profilePictureSender)
 
     return res.status(201).json({
       success: true,

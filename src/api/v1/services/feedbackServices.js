@@ -42,11 +42,13 @@ exports.saveRefreshToken = async (token) => {
   return refreshToken.save()
 }
 
-exports.create = async (description,idSender,idReceiver) => {
+exports.create = async (description,idSender,idReceiver,usernameSender,profilePictureSender) => {
   const feedback = new Feedback({
     description,
     idSender,
-    idReceiver
+    idReceiver,
+    usernameSender,
+    profilePictureSender
   })
 
   return feedback.save()
