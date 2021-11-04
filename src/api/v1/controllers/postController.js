@@ -29,13 +29,12 @@ exports.read = async (req, res) => {
   .where("expiredDate").gt(ls)
   .sort({"created_at": 1 })
 
-  post.forEach(async(record)=>{
-    // Do whatever processing you want
-    let userId = record.userId
-    const user = await User.find({_id:userId})
-    res.json(user)
-});
-  res.json(post)
+  // res.json(post)
+  return res.status(500).json({
+    success: true,
+    message: 'Get post timeline berhasil',
+    data:post
+  })
 }
 
 exports.createPost = async (req, res) => {
