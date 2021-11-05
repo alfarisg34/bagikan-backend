@@ -4,7 +4,7 @@ const multer = require('multer')
 const fs = require('fs');
 
 //hide attribute
-const queryConfig = { password: 0 ,created_at : 0, _id : 0}
+const queryConfig = { password: 0 ,created_at : 0}
 
 exports.getUser = async (req, res) => {
   const user = await User.find()
