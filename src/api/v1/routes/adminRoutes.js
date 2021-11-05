@@ -6,7 +6,7 @@ const router = Router()
 
 router.post('/login/admin', adminController.login)
 router.post('/token', authController.refreshToken)
-router.post('/delete/user',verifyToken, adminController.deleteUser)
-router.post('/delete/post',verifyToken, adminController.deletePost)
+router.delete('/delete/user/:id',verifyToken, adminController.deleteUser)
+router.delete('/delete/post/:id',verifyToken, adminController.deletePost)
 
 module.exports = router

@@ -58,7 +58,7 @@ exports.refreshToken = async (req, res) => {
 }
 
 exports.deleteUser = async (req, res) => {
-  const userId = req.body.id
+  const userId = req.params.id
   const user = await User.findOneAndDelete({ _id: userId })
 
   res.status(200).json({
@@ -69,7 +69,7 @@ exports.deleteUser = async (req, res) => {
 }
 
 exports.deletePost = async (req, res) => {
-  const postId = req.body.id
+  const postId = req.params.id
   const post = await Post.findOneAndDelete({ _id: postId })
 
   res.status(200).json({
