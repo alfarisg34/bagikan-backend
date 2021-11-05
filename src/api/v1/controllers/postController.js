@@ -9,6 +9,30 @@ exports.getPost = async (req, res) => {
 
   res.json(post)
 }
+exports.searchPost = async (req, res) => {
+  try {
+    // const findPost = await Post.find({title:{$regex: req.query.title}})
+    // if(req.query.title !=null && req.query.title != null){
+    // }else if(){
+
+    // }else if(){
+
+    // }else{
+
+    // }
+    const findPost = await Post.find({$and:[{title:{$regex: req.query.title,$options: 'i'}},{category:{$regex: req.query.category,$options: 'i'}},{location:{$regex: req.query.location,$options: 'i'}}]})
+    return res.status(200).json({
+        success: true,
+        data: findPost
+    })
+} catch (error) {
+    return res.status(400).json({
+        success: false,
+        message: error.message
+    })
+}
+}
+
 exports.readPostPrivate = async (req, res) => {
   const id = req.user.id
   const queryConfig = { title: 0 ,created_at : 0, description : 0,location:0,category:0,expired:0,created_at:0,like:0,username:0,phone:0,profilePicture:0}
