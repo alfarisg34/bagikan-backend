@@ -7,16 +7,43 @@ exports.getLike = async (req, res) => {
   const userId = req.user.id
   const like = await Like.findOne({$and:[{userId:userId},{postId:postId}]})
 
-  res.status(201).json({
-    success: true,
-    message: 'Get Like Status Success',
-    data:{
-      postId:postId,
-      userId:userId,
-      statusLike:like.status,
-      
+  try {
+    if(like){
+      res.status(201).json({
+        success: true,
+        message: 'Get Like Status Success',
+        data:{
+          postId:postId,
+          userId:userId,
+          statusLike:like.status,
+          
+        }
+      })
     }
-  })
+    else{
+  
+      res.status(201).json({
+        success: true,
+        message: 'Get Like Status Success(not created)',
+        data:{
+          postId:postId,
+          userId:userId,
+          statusLike:false,
+          
+        }
+      })
+    }
+  } catch (error) {
+
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to like!',
+      errors: error,
+    })
+  }
+  
+
+  
 }
 exports.like = async (req, res) => {
   const postId = req.params.id
