@@ -65,6 +65,7 @@ exports.like = async (req, res) => {
         data:{
           postId:postId,
           like:post.like,
+          statusLike:like.statusLike, 
         }
       })
     }
@@ -101,6 +102,7 @@ exports.dislike = async (req, res) => {
         data:{
           postId:postId,
           like:post.like,
+          statusLike:like.statusLike,
         }
       })
     }
