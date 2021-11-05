@@ -11,16 +11,8 @@ exports.getPost = async (req, res) => {
 }
 exports.searchPost = async (req, res) => {
   try {
-    // const findPost = await Post.find({title:{$regex: req.query.title}})
-    // if(req.query.title !=null && req.query.title != null){
-    // }else if(){
-
-    // }else if(){
-
-    // }else{
-
-    // }
-    const findPost = await Post.find({$and:[{title:{$regex: req.query.title,$options: 'i'}},{category:{$regex: req.query.category,$options: 'i'}},{location:{$regex: req.query.location,$options: 'i'}}]})
+    let ls= Date.now()
+    const findPost = await Post.find({$and:[{title:{$regex: req.query.title,$options: 'i'}},{category:{$regex: req.query.category,$options: 'i'}},{location:{$regex: req.query.location,$options: 'i'}}]}).where("expiredDate").gt(ls).sort({"created_at": 1 })
     return res.status(200).json({
         success: true,
         data: findPost
