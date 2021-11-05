@@ -2,6 +2,22 @@ const { likeServices } = require('../services')
 const { Like,Post,User} = require('../models')
 const { post } = require('../routes/authRoutes')
 
+exports.getLike = async (req, res) => {
+  const postId = req.params.id
+  const userId = req.user.id
+  const like = await Like.findOne({$and:[{userId:userId},{postId:postId}]})
+
+  res.status(201).json({
+    success: true,
+    message: 'Get Like Status Success',
+    data:{
+      postId:postId,
+      userId:userId,
+      statusLike:like.status,
+      
+    }
+  })
+}
 exports.like = async (req, res) => {
   const postId = req.params.id
   const userId = req.user.id
@@ -26,6 +42,8 @@ exports.like = async (req, res) => {
         data:{
           postId:postId,
           like:post.like,
+          statusLike:like.statusLike,
+          
         }
       })
     }
