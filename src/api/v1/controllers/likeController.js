@@ -61,7 +61,7 @@ exports.like = async (req, res) => {
       
       post.like +=1
       post.save()
-      console.log(post)
+      // console.log(post)
       
       res.status(201).json({
         success: true,
@@ -69,8 +69,6 @@ exports.like = async (req, res) => {
         data:{
           postId:postId,
           like:post.like,
-          statusLike:like.statusLike,
-          
         }
       })
     }
@@ -92,7 +90,6 @@ exports.like = async (req, res) => {
         data:{
           postId:postId,
           like:post.like,
-          statusLike:like.statusLike, 
         }
       })
     }
@@ -129,7 +126,6 @@ exports.dislike = async (req, res) => {
         data:{
           postId:postId,
           like:post.like,
-          statusLike:like.statusLike,
         }
       })
     }
