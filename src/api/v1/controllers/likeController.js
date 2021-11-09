@@ -1,6 +1,6 @@
 const { likeServices } = require('../services')
 const { Like,Post,User} = require('../models')
-const { post } = require('../routes/authRoutes')
+// const { post } = require('../routes/authRoutes')
 
 exports.getLike = async (req, res) => {
   const postId = req.params.id
