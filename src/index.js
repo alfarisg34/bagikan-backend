@@ -12,7 +12,7 @@ const app = express()
 
 // Setting up environment variables
 dotenv.config()
-const port = process.env.APP_PORT || 8090
+const port = process.env.PORT || 8090
 
 // Database connection
 config.database(() => {
