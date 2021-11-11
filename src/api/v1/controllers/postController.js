@@ -107,7 +107,8 @@ exports.updatePost = async (req, res) => {
   // console.log(post)
   // console.log(req.body)
   let picture;
-  imgbbUploader(process.env.IMGBB_API, `./src/api/v1/uploads/post/${req.file['filename']}`)
+  if(req.file){
+    imgbbUploader(process.env.IMGBB_API, `./src/api/v1/uploads/post/${req.file['filename']}`)
   .then(async(response) => {
     if(req.file){
       if (post.picture !== 'pict.jpg') {
@@ -130,6 +131,23 @@ exports.updatePost = async (req, res) => {
     })
   })
   .catch((error) => console.error(error));
+  }
+  else{
+    const result = await post.updateOne({
+      title: title,
+      description: description,
+      location: location,
+      category: category,
+      expired: expired,
+      picture: picture,
+  });
+  res.status(201).json({
+    success: true,
+    message: 'Successfully updated post!',
+    data: result,
+  })
+  }
+  
 }
 
 exports.likePost = async (req, res) => {

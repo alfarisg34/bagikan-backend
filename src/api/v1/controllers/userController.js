@@ -58,18 +58,33 @@ exports.updateProfile = async (req, res) => {
 
   // console.log(process.env.IMGBB_API)
   let profilePicture;
-  
-    imgbbUploader(process.env.IMGBB_API, `./src/api/v1/uploads/profilepicture/${req.file['filename']}`)
-    .then(async(response) => {
-      if(req.file){
-        if(user.profilePicture !== 'default.jpg'){
-          // fs.unlinkSync(`./src/api/v1/uploads/profilepicture/${user.profilePicture}`);
-      }
+    if(req.file){
+      imgbbUploader(process.env.IMGBB_API, `./src/api/v1/uploads/profilepicture/${req.file['filename']}`)
+      .then(async(response) => {
+
       profilePicture = response['display_url']
-    }
-    const post = await Post.updateMany({ userId: userId }, {$set: {profilePicture: profilePicture}})
-    await Post.updateMany({ userId: userId }, {$set: {phone: phone}})
-    const feedback = await Feedback.updateMany({ userId: userId }, {$set: {profilePictureSender: profilePicture}})
+
+      const post = await Post.updateMany({ userId: userId }, {$set: {profilePicture: profilePicture}})
+      await Post.updateMany({ userId: userId }, {$set: {phone: phone}})
+      const feedback = await Feedback.updateMany({ userId: userId }, {$set: {profilePictureSender: profilePicture}})
+        const result = await user.updateOne({ 
+          name: name,
+          description: description,
+          phone: phone,
+          profilePicture: profilePicture, 
+        })
+        res.status(201).json({
+          success: true,
+          message: 'Successfully updated user!',
+          data: result,
+        })
+      })
+      .catch((error) => console.error(error));
+    }else{
+
+      const post = await Post.updateMany({ userId: userId }, {$set: {profilePicture: profilePicture}})
+      await Post.updateMany({ userId: userId }, {$set: {phone: phone}})
+      const feedback = await Feedback.updateMany({ userId: userId }, {$set: {profilePictureSender: profilePicture}})
       const result = await user.updateOne({ 
         name: name,
         description: description,
@@ -81,7 +96,5 @@ exports.updateProfile = async (req, res) => {
         message: 'Successfully updated user!',
         data: result,
       })
-    })
-    .catch((error) => console.error(error));
-  
+    }
 }
