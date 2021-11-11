@@ -1,6 +1,6 @@
 const { postServices } = require('../services')
 const { Post,User} = require('../models')
-
+const imgbbUploader = require("imgbb-uploader");
 const multer = require('multer')
 const fs = require('fs');
 
@@ -56,10 +56,8 @@ exports.read = async (req, res) => {
 exports.createPost = async (req, res) => {
   const { title,description,location,category,expired } = req.body
   let ts = Date.now();
-
-  try {
-    // console.log(req.file)
-
+  imgbbUploader(process.env.IMGBB_API, `./src/api/v1/uploads/post/${req.file['filename']}`)
+  .then(async(response) =>{
     const userId = req.user.id
     const user = await User.findOne({ _id: userId })
     const username = user.username
@@ -89,7 +87,7 @@ exports.createPost = async (req, res) => {
     const expiredDate = new Date(ts)
     // console.log(expiredDate)
     // const expiredDate = Date.now + expired
-    let picture = req.file['filename']
+    let picture = response['display_url']
     
     await postServices.create(title,description,location,category,expired,picture,userId,username,profilePicture,phone,expiredDate)
 
@@ -97,16 +95,9 @@ exports.createPost = async (req, res) => {
       success: true,
       message: 'Post stored successfully!',
     })
-  } catch (err) {
-    console.log('Errors: ', err)
-    const errorMessage = postServices.handleRegistrationErrors(err)
 
-    return res.status(500).json({
-      success: false,
-      message: 'Failed to create post!',
-      errors: errorMessage,
-    })
-  }
+  })
+  .catch((error) => console.error(error));
 }
 
 exports.updatePost = async (req, res) => {
@@ -116,13 +107,14 @@ exports.updatePost = async (req, res) => {
   // console.log(post)
   // console.log(req.body)
   let picture;
-  if(req.file){
-    if (post.picture !== 'pict.jpg') {
-      fs.unlinkSync(`./src/api/v1/uploads/post/${post.picture}`);
-  }
-    picture = req.file['filename']
-  }
-  try {
+  imgbbUploader(process.env.IMGBB_API, `./src/api/v1/uploads/post/${req.file['filename']}`)
+  .then(async(response) => {
+    if(req.file){
+      if (post.picture !== 'pict.jpg') {
+        // fs.unlinkSync(`./src/api/v1/uploads/post/${post.picture}`);
+    }
+      picture = response['display_url']
+    }
     const result = await post.updateOne({
       title: title,
       description: description,
@@ -136,13 +128,8 @@ exports.updatePost = async (req, res) => {
       message: 'Successfully updated post!',
       data: result,
     })
-  } catch (error) {
-    return res.status(400).json({
-      success: false,
-      message: error.message
-  });
-  }
-  
+  })
+  .catch((error) => console.error(error));
 }
 
 exports.likePost = async (req, res) => {
