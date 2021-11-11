@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
   name : String,
   profilePicture: {
     type: String,
-    default: 'default.jpg',
+    default: 'https://i.ibb.co/Cb66LM8/a924948ab119.jpg',
   },
   description : String,
   phone: {
