@@ -66,7 +66,7 @@ exports.updateProfile = async (req, res) => {
 
       const post = await Post.updateMany({ userId: userId }, {$set: {profilePicture: profilePicture}})
       await Post.updateMany({ userId: userId }, {$set: {phone: phone}})
-      const feedback = await Feedback.updateMany({ userId: userId }, {$set: {profilePictureSender: profilePicture}})
+      const feedback = await Feedback.updateMany({ idSender: userId }, {$set: {profilePictureSender: profilePicture}})
         const result = await user.updateOne({ 
           name: name,
           description: description,
