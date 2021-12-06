@@ -1,5 +1,5 @@
 const { authServices } = require('../services')
-const { User ,Post,Admin} = require('../models')
+const { User ,Post,Admin,Feedback} = require('../models')
 
 exports.login = async (req, res) => {
   const { username, password } = req.body
@@ -59,6 +59,8 @@ exports.refreshToken = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
   const userId = req.params.id
+  const feedback = await Feedback.deleteMany({ idSender: userId })
+  const post = await Post.deleteMany({ userId: userId })
   const user = await User.findOneAndDelete({ _id: userId })
 
   res.status(200).json({
